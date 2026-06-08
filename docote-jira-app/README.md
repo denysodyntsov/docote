@@ -34,8 +34,24 @@ This scaffold is intentionally conservative:
 - no Confluence publishing yet
 - no deep repo parsing yet
 
-## Next likely tasks
-- replace mock generation with real LLM provider call
-- wire actual Forge UI
-- test against real Jira sample issues
-- add issue-type-aware templates
+## Current implementation state
+The project now includes:
+- mock and live provider modes
+- provider fallback behaviour
+- prompt trimming
+- Jira issue normalization
+- frontend state badges for mode and trimming
+- provider JSON extraction guardrails
+- retry and timeout controls
+
+## Most important next steps
+- deploy the Forge app into a real Jira environment
+- test first in mock mode inside Jira
+- then switch to live provider mode
+- validate outputs on real issues and refine prompt quality
+
+## Supporting docs to read next
+- `docs/REAL_TEST_READINESS.md`
+- `docs/TEST_RUNBOOK.md`
+- `docs/NEXT_REAL_WORLD_STEPS.md`
+- `docs/CONFIGURATION.md`
