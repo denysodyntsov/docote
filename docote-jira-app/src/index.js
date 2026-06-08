@@ -2,6 +2,8 @@ import Resolver from '@forge/resolver';
 import api, { route, storage } from '@forge/api';
 import { buildDocumentationPrompt } from './prompts.js';
 import { mockGenerate } from './mock-generator.js';
+import { generateDocumentationFromPrompt } from './provider.js';
+import { getDocoteConfig, isRealProviderEnabled } from './config.js';
 
 const resolver = new Resolver();
 
@@ -28,23 +30,39 @@ resolver.define('generateDocumentation', async ({ payload, context }) => {
   const issue = await response.json();
 
   const prompt = buildDocumentationPrompt({ issue, extraContext });
+  const cfg = getDocoteConfig();
 
-  // MVP mode: mock generation for now.
-  const outputs = mockGenerate(issue, extraContext);
+  let outputs;
+  let modeUsed = 'mock';
+
+  if (isRealProviderEnabled()) {
+    try {
+      outputs = await generateDocumentationFromPrompt(prompt);
+      modeUsed = 'live';
+    } catch (error) {
+      outputs = mockGenerate(issue, extraContext);
+      modeUsed = 'mock-fallback';
+    }
+  } else {
+    outputs = mockGenerate(issue, extraContext);
+  }
 
   await storage.set(`docote:last:${issueKey}`, {
     issueKey,
     extraContext,
     outputs,
     prompt,
-    generatedAt: new Date().toISOString()
+    generatedAt: new Date().toISOString(),
+    modeUsed
   });
 
   return {
     ok: true,
     issueKey,
     outputs,
-    promptPreview: prompt.slice(0, 1200)
+    promptPreview: prompt.slice(0, 1200),
+    modeUsed,
+    providerMode: cfg.providerMode
   };
 });
 
