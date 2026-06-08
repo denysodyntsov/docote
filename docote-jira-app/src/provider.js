@@ -1,5 +1,6 @@
 import { validateProviderOutput } from './provider-contract.js';
 import { getDocoteConfig } from './config.js';
+import { extractJsonObject } from './json-utils.js';
 
 export async function generateDocumentationFromPrompt(prompt) {
   const cfg = getDocoteConfig();
@@ -45,7 +46,7 @@ export async function generateDocumentationFromPrompt(prompt) {
 
   let parsed;
   try {
-    parsed = JSON.parse(content);
+    parsed = extractJsonObject(content);
   } catch {
     throw new Error('Provider returned invalid JSON content.');
   }
