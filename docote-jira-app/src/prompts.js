@@ -1,9 +1,11 @@
+import { normalizeIssueForPrompt } from './issue-normalizer.js';
+
 export function buildDocumentationPrompt({ issue, extraContext = '' }) {
-  const fields = issue?.fields || {};
-  const summary = fields.summary || '';
-  const description = normalizeJiraField(fields.description);
-  const issueType = fields.issuetype?.name || '';
-  const comments = normalizeComments(fields.comment?.comments || []);
+  const normalized = normalizeIssueForPrompt(issue);
+  const summary = normalized.summary || '';
+  const description = normalized.description || '';
+  const issueType = normalized.issueType || '';
+  const comments = normalized.comments || 'No comments available.';
   const acceptanceCriteria = extractAcceptanceCriteria(description);
 
   return `You are DoCoTe, a documentation-first assistant for Jira-based software teams.
@@ -20,7 +22,10 @@ Rules:
 - Treat output as a draft for human review.
 - Focus on implementation understanding and release communication.
 
+Issue key: ${normalized.key}
 Issue type: ${issueType}
+Status: ${normalized.status}
+Priority: ${normalized.priority}
 Summary: ${summary}
 
 Description:
@@ -41,24 +46,6 @@ Return strict JSON with this shape:
   "documentation_draft": "...",
   "release_summary": "..."
 }`;
-}
-
-function normalizeJiraField(field) {
-  if (!field) return '';
-  if (typeof field === 'string') return field;
-  try {
-    return JSON.stringify(field, null, 2);
-  } catch {
-    return String(field);
-  }
-}
-
-function normalizeComments(comments) {
-  if (!comments.length) return 'No comments available.';
-  return comments
-    .slice(0, 10)
-    .map((c, i) => `Comment ${i + 1}: ${normalizeJiraField(c.body)}`)
-    .join('\n');
 }
 
 function extractAcceptanceCriteria(description) {
