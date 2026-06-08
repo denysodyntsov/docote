@@ -9,6 +9,8 @@ The provider path is now configurable through environment variables.
 - `DOCOTE_API_BASE_URL` — defaults to `https://api.openai.com/v1`
 - `DOCOTE_MODEL` — defaults to `gpt-4.1-mini`
 - `DOCOTE_TEMPERATURE` — defaults to `0.2`
+- `DOCOTE_TIMEOUT_MS` — defaults to `20000`
+- `DOCOTE_RETRIES` — defaults to `1`
 
 ## Recommended initial setup
 For safe development:
