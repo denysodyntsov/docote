@@ -4,6 +4,8 @@ import { buildDocumentationPrompt } from './prompts.js';
 import { mockGenerate } from './mock-generator.js';
 import { generateDocumentationFromPrompt } from './provider.js';
 import { getDocoteConfig, isRealProviderEnabled } from './config.js';
+import { trimPrompt } from './prompt-guardrails.js';
+import { toUserSafeError } from './errors.js';
 
 const resolver = new Resolver();
 
@@ -29,17 +31,21 @@ resolver.define('generateDocumentation', async ({ payload, context }) => {
   const response = await api.asApp().requestJira(route`/rest/api/3/issue/${issueKey}?expand=renderedFields`);
   const issue = await response.json();
 
-  const prompt = buildDocumentationPrompt({ issue, extraContext });
+  const rawPrompt = buildDocumentationPrompt({ issue, extraContext });
+  const promptInfo = trimPrompt(rawPrompt);
+  const prompt = promptInfo.prompt;
   const cfg = getDocoteConfig();
 
   let outputs;
   let modeUsed = 'mock';
+  let providerError = null;
 
   if (isRealProviderEnabled()) {
     try {
       outputs = await generateDocumentationFromPrompt(prompt);
       modeUsed = 'live';
     } catch (error) {
+      providerError = toUserSafeError(error, 'Live generation failed.');
       outputs = mockGenerate(issue, extraContext);
       modeUsed = 'mock-fallback';
     }
@@ -52,8 +58,10 @@ resolver.define('generateDocumentation', async ({ payload, context }) => {
     extraContext,
     outputs,
     prompt,
+    promptInfo,
     generatedAt: new Date().toISOString(),
-    modeUsed
+    modeUsed,
+    providerError
   });
 
   return {
@@ -61,8 +69,10 @@ resolver.define('generateDocumentation', async ({ payload, context }) => {
     issueKey,
     outputs,
     promptPreview: prompt.slice(0, 1200),
+    promptInfo,
     modeUsed,
-    providerMode: cfg.providerMode
+    providerMode: cfg.providerMode,
+    providerError
   };
 });
 
