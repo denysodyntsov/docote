@@ -4,6 +4,8 @@ const message = document.getElementById('message');
 const technicalSummary = document.getElementById('technicalSummary');
 const documentationDraft = document.getElementById('documentationDraft');
 const releaseSummary = document.getElementById('releaseSummary');
+const modeBadge = document.getElementById('modeBadge');
+const trimBadge = document.getElementById('trimBadge');
 const extraContextInput = document.getElementById('extraContext');
 const generateBtn = document.getElementById('generateBtn');
 const loadLastBtn = document.getElementById('loadLastBtn');
@@ -20,6 +22,20 @@ function setOutputs(outputs) {
   releaseSummary.textContent = outputs?.release_summary || 'No output.';
 }
 
+function setMeta(result) {
+  modeBadge.textContent = `Mode: ${result?.modeUsed || 'unknown'}`;
+
+  const promptInfo = result?.promptInfo;
+  if (!promptInfo) {
+    trimBadge.textContent = 'Prompt: not evaluated';
+    return;
+  }
+
+  trimBadge.textContent = promptInfo.trimmed
+    ? `Prompt: trimmed (${promptInfo.originalLength} → ${promptInfo.finalLength})`
+    : `Prompt: not trimmed (${promptInfo.finalLength})`;
+}
+
 async function runGenerate() {
   try {
     setMessage('Generating draft outputs...');
@@ -30,7 +46,12 @@ async function runGenerate() {
       throw new Error(result?.error || 'Generation failed.');
     }
     setOutputs(result.outputs);
-    setMessage('Draft outputs generated successfully.', 'success');
+    setMeta(result);
+    if (result.providerError) {
+      setMessage(`Draft outputs generated with fallback. ${result.providerError}`, 'success');
+    } else {
+      setMessage('Draft outputs generated successfully.', 'success');
+    }
   } catch (error) {
     setMessage(error.message || 'Generation failed.', 'error');
   } finally {
@@ -47,7 +68,12 @@ async function runLoadLast() {
       throw new Error('No previous output found.');
     }
     setOutputs(result.data.outputs);
-    setMessage('Loaded previous outputs.', 'success');
+    setMeta(result.data);
+    if (result.data.providerError) {
+      setMessage(`Loaded previous outputs. Last live attempt fallback reason: ${result.data.providerError}`, 'success');
+    } else {
+      setMessage('Loaded previous outputs.', 'success');
+    }
   } catch (error) {
     setMessage(error.message || 'Unable to load previous output.', 'error');
   } finally {

@@ -2,6 +2,8 @@ const message = document.getElementById('message');
 const technicalSummary = document.getElementById('technicalSummary');
 const documentationDraft = document.getElementById('documentationDraft');
 const releaseSummary = document.getElementById('releaseSummary');
+const modeBadge = document.getElementById('modeBadge');
+const trimBadge = document.getElementById('trimBadge');
 
 function setMessage(text, type = '') {
   message.textContent = text;
@@ -15,11 +17,31 @@ function setOutputs(outputs) {
   releaseSummary.textContent = outputs?.release_summary || 'No output.';
 }
 
+function setMeta(result) {
+  modeBadge.textContent = `Mode: ${result?.modeUsed || 'local mock'}`;
+
+  const promptInfo = result?.promptInfo;
+  if (!promptInfo) {
+    trimBadge.textContent = 'Prompt: not evaluated';
+    return;
+  }
+
+  trimBadge.textContent = promptInfo.trimmed
+    ? `Prompt: trimmed (${promptInfo.originalLength} → ${promptInfo.finalLength})`
+    : `Prompt: not trimmed (${promptInfo.finalLength})`;
+}
+
 async function mockInvoke(action, payload = {}) {
   // Placeholder for Forge bridge invoke().
   if (action === 'generateDocumentation') {
     return {
       ok: true,
+      modeUsed: 'local-mock',
+      promptInfo: {
+        trimmed: false,
+        originalLength: 420,
+        finalLength: 420
+      },
       outputs: {
         technical_summary: 'Mock technical summary from DoCoTe frontend scaffold. Replace with Forge invoke().',
         documentation_draft: 'Mock documentation draft from DoCoTe frontend scaffold. Replace with Forge invoke().',
@@ -31,6 +53,12 @@ async function mockInvoke(action, payload = {}) {
     return {
       ok: true,
       data: {
+        modeUsed: 'local-mock',
+        promptInfo: {
+          trimmed: false,
+          originalLength: 420,
+          finalLength: 420
+        },
         outputs: {
           technical_summary: 'Previously generated technical summary placeholder.',
           documentation_draft: 'Previously generated documentation draft placeholder.',
@@ -51,6 +79,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     return;
   }
   setOutputs(result.outputs);
+  setMeta(result);
   setMessage('Draft outputs generated successfully.', 'success');
 });
 
@@ -62,6 +91,7 @@ document.getElementById('loadLastBtn').addEventListener('click', async () => {
     return;
   }
   setOutputs(result.data.outputs);
+  setMeta(result.data);
   setMessage('Loaded previous outputs.', 'success');
 });
 
