@@ -1,0 +1,149 @@
+:root {
+  --bg: #111318;
+  --panel: #1a1d24;
+  --panel-2: #20242d;
+  --line: rgba(255,255,255,0.08);
+  --text: #f2f4f8;
+  --muted: #aeb6c4;
+  --accent: #f2a51a;
+  --accent-2: #ffbc43;
+  --success: #7ee787;
+  --danger: #ff8c8c;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+.app-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  color: #ffd27c;
+  border: 1px solid rgba(242,165,26,0.25);
+  background: rgba(242,165,26,0.08);
+  border-radius: 999px;
+  padding: 5px 9px;
+  margin-bottom: 10px;
+}
+h1, h2 {
+  margin: 0;
+}
+h1 { font-size: 28px; }
+h2 { font-size: 18px; }
+.status-badge {
+  color: #161616;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+}
+.panel, .output-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+.panel {
+  padding: 18px;
+  margin-bottom: 18px;
+}
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 14px;
+  font: inherit;
+}
+textarea:focus {
+  outline: none;
+  border-color: rgba(242,165,26,0.4);
+  box-shadow: 0 0 0 3px rgba(242,165,26,0.12);
+}
+.action-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  font: inherit;
+}
+#generateBtn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #151515;
+}
+.secondary, .copy-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.message {
+  min-height: 22px;
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+.message.success { color: var(--success); }
+.message.error { color: var(--danger); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.output-card {
+  padding: 18px;
+}
+.full-width {
+  grid-column: 1 / -1;
+}
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--muted);
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 14px;
+  min-height: 180px;
+}
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns: 1fr; }
+}

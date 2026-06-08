@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DoCoTe Issue Panel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">DoCoTe</div>
+        <h1>Documentation Generator</h1>
+      </div>
+      <span class="status-badge">Forge v1</span>
+    </header>
+
+    <section class="panel">
+      <label for="extraContext">Additional PR / implementation context</label>
+      <textarea id="extraContext" placeholder="Paste pull request summary, implementation notes, deployment notes, or any context missing from the Jira issue."></textarea>
+      <div class="action-row">
+        <button id="generateBtn">Generate documentation</button>
+        <button id="loadLastBtn" class="secondary">Load last result</button>
+      </div>
+      <p id="message" class="message"></p>
+    </section>
+
+    <section class="grid">
+      <article class="output-card">
+        <div class="card-head">
+          <h2>Technical summary</h2>
+          <button data-copy-target="technicalSummary" class="copy-btn">Copy</button>
+        </div>
+        <pre id="technicalSummary">No output yet.</pre>
+      </article>
+
+      <article class="output-card">
+        <div class="card-head">
+          <h2>Documentation draft</h2>
+          <button data-copy-target="documentationDraft" class="copy-btn">Copy</button>
+        </div>
+        <pre id="documentationDraft">No output yet.</pre>
+      </article>
+
+      <article class="output-card full-width">
+        <div class="card-head">
+          <h2>Release summary</h2>
+          <button data-copy-target="releaseSummary" class="copy-btn">Copy</button>
+        </div>
+        <pre id="releaseSummary">No output yet.</pre>
+      </article>
+    </section>
+  </div>
+
+  <script type="module" src="forge-app.js"></script>
+</body>
+</html>

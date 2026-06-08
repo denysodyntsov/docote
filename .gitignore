@@ -1,0 +1,17 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Local databases / runtime
+docote-landing/docote.db
+
+# Env / secrets
+.env
+.env.*
+
+# Logs
+*.log
