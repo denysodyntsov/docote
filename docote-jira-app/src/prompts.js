@@ -1,4 +1,5 @@
 import { normalizeIssueForPrompt } from './issue-normalizer.js';
+import { extractAcceptanceCriteriaSections } from './acceptance-criteria.js';
 
 export function buildDocumentationPrompt({ issue, extraContext = '' }) {
   const normalized = normalizeIssueForPrompt(issue);
@@ -6,7 +7,7 @@ export function buildDocumentationPrompt({ issue, extraContext = '' }) {
   const description = normalized.description || '';
   const issueType = normalized.issueType || '';
   const comments = normalized.comments || 'No comments available.';
-  const acceptanceCriteria = extractAcceptanceCriteria(description);
+  const acceptanceCriteria = extractAcceptanceCriteriaSections(description);
 
   return `You are DoCoTe, a documentation-first assistant for Jira-based software teams.
 
@@ -48,11 +49,3 @@ Return strict JSON with this shape:
 }`;
 }
 
-function extractAcceptanceCriteria(description) {
-  if (!description) return 'Not explicitly identified.';
-  const lower = description.toLowerCase();
-  const marker = 'acceptance criteria';
-  const idx = lower.indexOf(marker);
-  if (idx === -1) return 'Not explicitly identified.';
-  return description.slice(idx, idx + 1200);
-}
