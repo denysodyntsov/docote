@@ -19,6 +19,7 @@ import { calculateDocPriorityScore, priorityBand } from '../../../lib/doc-priori
 import { buildReleaseImpact } from '../../../lib/release-impact';
 import { buildQualitySignals } from '../../../lib/quality-signals';
 import { buildAnalysisConfidence } from '../../../lib/analysis-confidence';
+import { buildNextActionsSummary } from '../../../lib/next-actions-summary';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -61,6 +62,10 @@ export async function POST(req: Request) {
   const analysisConfidence = buildAnalysisConfidence({ qualitySignals });
   const docPriorityScore = calculateDocPriorityScore({ documentImpact, fileCoverage });
   const docPriorityBand = priorityBand(docPriorityScore);
+  const nextActionsSummary = buildNextActionsSummary({
+    recommendations,
+    docPriority: { band: docPriorityBand }
+  });
   const releaseImpact = buildReleaseImpact({ documentImpact, fileCoverage });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
@@ -81,6 +86,7 @@ export async function POST(req: Request) {
     releaseImpact,
     qualitySignals,
     analysisConfidence,
+    nextActionsSummary,
     contextMergeSummary,
     docPriority: {
       score: docPriorityScore,

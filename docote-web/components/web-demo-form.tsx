@@ -19,6 +19,7 @@ import { evaluateAnalysisReadiness } from '../lib/analysis-readiness';
 import { ReadinessCard } from './readiness-card';
 import { ContextMergeCard } from './context-merge-card';
 import { AnalysisConfidenceCard } from './analysis-confidence-card';
+import { NextActionsSummaryCard } from './next-actions-summary-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -124,6 +125,7 @@ export function WebDemoForm() {
       {response?.contextMergeSummary ? <ContextMergeCard summary={response.contextMergeSummary} /> : null}
       {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
       {response?.analysisConfidence ? <AnalysisConfidenceCard confidence={response.analysisConfidence} /> : null}
+      {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
       {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}
