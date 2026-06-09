@@ -5,6 +5,7 @@ import { OutputPreview } from '../components/output-preview';
 import { WebDemoForm } from '../components/web-demo-form';
 import { GitHubConnectCard } from '../components/github-connect-card';
 import { AnalysisHistory } from '../components/analysis-history';
+import { CommitRangeCard } from '../components/commit-range-card';
 
 export default function HomePage() {
   return (
@@ -25,6 +26,7 @@ export default function HomePage() {
       <OnboardingCard />
       <GitHubConnectCard />
       <RepositorySelector />
+      <CommitRangeCard />
       <WebDemoForm />
       <OutputPreview />
       <AnalysisHistory />
