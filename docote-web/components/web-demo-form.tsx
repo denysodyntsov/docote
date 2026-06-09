@@ -43,6 +43,12 @@ export function WebDemoForm() {
     };
 
     try {
+      await fetch('/api/docs/current', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentDocText: payload.currentDocText })
+      });
+
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
