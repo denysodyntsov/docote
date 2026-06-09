@@ -2,6 +2,7 @@ import { OnboardingCard } from '../components/onboarding-card';
 import { FeatureGrid } from '../components/feature-grid';
 import { RepositorySelector } from '../components/repository-selector';
 import { OutputPreview } from '../components/output-preview';
+import { WebDemoForm } from '../components/web-demo-form';
 
 export default function HomePage() {
   return (
@@ -21,6 +22,7 @@ export default function HomePage() {
 
       <OnboardingCard />
       <RepositorySelector />
+      <WebDemoForm />
       <OutputPreview />
       <FeatureGrid />
     </main>
