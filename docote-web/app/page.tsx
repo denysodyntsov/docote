@@ -3,6 +3,7 @@ import { FeatureGrid } from '../components/feature-grid';
 import { RepositorySelector } from '../components/repository-selector';
 import { OutputPreview } from '../components/output-preview';
 import { WebDemoForm } from '../components/web-demo-form';
+import { GitHubConnectCard } from '../components/github-connect-card';
 
 export default function HomePage() {
   return (
@@ -21,6 +22,7 @@ export default function HomePage() {
       </section>
 
       <OnboardingCard />
+      <GitHubConnectCard />
       <RepositorySelector />
       <WebDemoForm />
       <OutputPreview />
