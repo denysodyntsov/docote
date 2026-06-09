@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { defaultSelectionState } from '../lib/selection-state';
 import { SelectionSummary } from './selection-summary';
 import { DocumentImpactList } from './document-impact-list';
-import { resolveAnalysisScope } from '../lib/analysis-scope-resolver';
+import { buildAnalysisRequest } from '../lib/analysis-request-builder';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -26,21 +26,12 @@ export function WebDemoForm() {
       extraContext: String(formData.get('extraContext') || '')
     };
 
-    const resolved = resolveAnalysisScope({
+    const payload = buildAnalysisRequest({
       state: draftState,
       selectedPr: draftState.scopeType === 'pull-request' ? Number(String(draftState.scopeRef).replace('#', '')) || null : null,
       selectedBranch: draftState.scopeType === 'branch' ? draftState.scopeRef : null,
       commitRangeLabel: draftState.scopeType === 'commit-range' ? draftState.scopeRef : null
     });
-
-    const payload = {
-      repository: resolved.repository,
-      scopeType: resolved.scopeType,
-      scopeRef: resolved.scopeRef,
-      jiraText: draftState.jiraText,
-      currentDocText: draftState.currentDocText,
-      extraContext: draftState.extraContext
-    };
 
     try {
       await fetch('/api/jira/context', {
