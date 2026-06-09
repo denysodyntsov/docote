@@ -15,11 +15,14 @@ import { RecommendationsList } from './recommendations-list';
 import { DocPriorityScoreCard } from './doc-priority-score-card';
 import { ReleaseImpactList } from './release-impact-list';
 import { QualitySignalsCard } from './quality-signals-card';
+import { evaluateAnalysisReadiness } from '../lib/analysis-readiness';
+import { ReadinessCard } from './readiness-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState<string>('');
+  const readiness = evaluateAnalysisReadiness(defaultSelectionState);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -92,6 +95,7 @@ export function WebDemoForm() {
         <button type="submit" disabled={loading} style={buttonStyle}>{loading ? 'Analyzing…' : 'Run mock analysis'}</button>
       </form>
       <SelectionSummary repository={defaultSelectionState.repository} scopeType={defaultSelectionState.scopeType} scopeRef={defaultSelectionState.scopeRef} />
+      <ReadinessCard readiness={readiness} />
       {error ? <p style={{ color: '#ff8c8c' }}>{error}</p> : null}
       {response ? (
         <>
