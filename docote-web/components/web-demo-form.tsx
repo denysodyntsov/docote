@@ -8,6 +8,7 @@ import { buildAnalysisRequest } from '../lib/analysis-request-builder';
 import { buildAnalysisSummary } from '../lib/analysis-summary';
 import { AnalysisSummaryCard } from './analysis-summary-card';
 import { AnalysisStatusList } from './analysis-status-list';
+import { OutputDiffList } from './output-diff-list';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -105,6 +106,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+      {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
       {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
     </section>
   );

@@ -24,3 +24,7 @@ export function storeAnalysisHistory(input: {
 export function getAnalysisHistory() {
   return historyStore;
 }
+
+export function getLatestAnalysisHistoryItem() {
+  return historyStore[0] || null;
+}

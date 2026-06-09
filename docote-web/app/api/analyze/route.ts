@@ -5,11 +5,12 @@ import type { AnalyzePayload } from '../../../lib/analysis-types';
 import { buildChangeContext } from '../../../lib/change-context';
 import { buildMockDiffContext } from '../../../lib/diff-context';
 import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-mock';
-import { storeAnalysisHistory } from '../../../lib/result-history';
+import { getLatestAnalysisHistoryItem, storeAnalysisHistory } from '../../../lib/result-history';
 import { buildDocumentImpact } from '../../../lib/document-impact';
 import { createRunMetadata } from '../../../lib/run-metadata';
 import { storeDebugSnapshot } from '../../../lib/debug-history';
 import { buildAnalysisStatus } from '../../../lib/analysis-status';
+import { buildOutputDiff } from '../../../lib/output-diff';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
 
   const context = buildChangeContext(payload);
   const diffContext = buildMockDiffContext(context);
+  const previousHistory = getLatestAnalysisHistoryItem();
   const analysis = runMockAnalysis(context);
   const runMetadata = createRunMetadata({
     mode: analysis.meta?.mode || 'unknown',
@@ -51,6 +53,14 @@ export async function POST(req: Request) {
     ...analysis,
     runMetadata,
     documentImpact: buildDocumentImpact(diffContext),
+    outputDiff: buildOutputDiff({
+      previous: previousHistory ? { technicalSummary: previousHistory.technicalSummary } : null,
+      current: {
+        technicalSummary: analysis.result?.technicalSummary,
+        releaseSummary: analysis.result?.releaseSummary,
+        documentationDraft: analysis.result?.documentationDraft
+      }
+    }),
     analysisStatus: buildAnalysisStatus(),
     debug: {
       contextSummary: context.summary,
