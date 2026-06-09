@@ -8,6 +8,7 @@ import { AnalysisHistory } from '../components/analysis-history';
 import { CommitRangeCard } from '../components/commit-range-card';
 import { CurrentDocStatus } from '../components/current-doc-status';
 import { JiraContextStatus } from '../components/jira-context-status';
+import { DebugHistory } from '../components/debug-history';
 
 export default function HomePage() {
   return (
@@ -34,6 +35,7 @@ export default function HomePage() {
       <CurrentDocStatus />
       <OutputPreview />
       <AnalysisHistory />
+      <DebugHistory />
       <FeatureGrid />
     </main>
   );

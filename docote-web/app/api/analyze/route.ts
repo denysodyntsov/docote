@@ -8,6 +8,7 @@ import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-
 import { storeAnalysisHistory } from '../../../lib/result-history';
 import { buildDocumentImpact } from '../../../lib/document-impact';
 import { createRunMetadata } from '../../../lib/run-metadata';
+import { storeDebugSnapshot } from '../../../lib/debug-history';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -35,6 +36,16 @@ export async function POST(req: Request) {
     response: analysis
   });
 
+  const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
+  const provider = previewProviderMode();
+
+  storeDebugSnapshot({
+    contextSummary: context.summary,
+    changedFiles: diffContext.changedFiles,
+    promptPreview,
+    providerMode: provider.mode
+  });
+
   return NextResponse.json({
     ...analysis,
     runMetadata,
@@ -42,8 +53,8 @@ export async function POST(req: Request) {
     debug: {
       contextSummary: context.summary,
       changedFiles: diffContext.changedFiles,
-      promptPreview: buildProviderPrompt(context, diffContext).slice(0, 1600),
-      provider: previewProviderMode()
+      promptPreview,
+      provider
     }
   });
 }
