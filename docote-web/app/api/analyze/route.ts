@@ -20,6 +20,7 @@ import { buildReleaseImpact } from '../../../lib/release-impact';
 import { buildQualitySignals } from '../../../lib/quality-signals';
 import { buildAnalysisConfidence } from '../../../lib/analysis-confidence';
 import { buildNextActionsSummary } from '../../../lib/next-actions-summary';
+import { buildExplainabilityNotes } from '../../../lib/explainability';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -60,6 +61,7 @@ export async function POST(req: Request) {
   });
   const recommendations = buildRecommendations({ fileCoverage, documentImpact });
   const analysisConfidence = buildAnalysisConfidence({ qualitySignals });
+  const explainabilityNotes = buildExplainabilityNotes({ qualitySignals });
   const docPriorityScore = calculateDocPriorityScore({ documentImpact, fileCoverage });
   const docPriorityBand = priorityBand(docPriorityScore);
   const nextActionsSummary = buildNextActionsSummary({
@@ -86,6 +88,7 @@ export async function POST(req: Request) {
     releaseImpact,
     qualitySignals,
     analysisConfidence,
+    explainabilityNotes,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
