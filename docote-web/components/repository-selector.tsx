@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { buildSelectionOptions } from '../lib/branch-pr-selector';
 
 export function RepositorySelector() {
   const [repositories, setRepositories] = useState<any[]>([]);
@@ -13,6 +14,7 @@ export function RepositorySelector() {
 
   const repo = repositories[0];
   const pr = pullRequests[0];
+  const options = buildSelectionOptions({ repositories, pullRequests });
 
   return (
     <section style={{ background: '#1a1d24', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24, marginTop: 24 }}>
@@ -23,9 +25,19 @@ export function RepositorySelector() {
         <Field label="Scope type" value="Pull Request" />
         <Field label="Scope reference" value={pr ? `#${pr.number} — ${pr.title}` : 'Loading…'} />
       </div>
+      <div style={{ marginTop: 16, padding: 14, borderRadius: 14, background: 'rgba(255,255,255,0.03)' }}>
+        <div style={{ color: '#aeb6c4', marginBottom: 8 }}>Available branch options</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {options.branchOptions.map((branch) => (
+            <span key={branch} style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(242,165,26,0.08)', color: '#ffd27c', fontSize: 13 }}>
+              {branch}
+            </span>
+          ))}
+        </div>
+      </div>
       <p style={{ marginTop: 16, color: '#aeb6c4', lineHeight: 1.7 }}>
-        This flow now reads from mocked GitHub-style backend endpoints. Next steps are OAuth, real repository access,
-        and PR / branch / commit-range selection.
+        This flow now reads from mocked GitHub-style backend endpoints and derives branch/PR selection options. Next steps are OAuth,
+        real repository access, and commit-range selection.
       </p>
     </section>
   );
