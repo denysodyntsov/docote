@@ -13,7 +13,11 @@ export function RepositorySelector() {
       setRepositories(repos);
       if (repos[0]?.full_name) setSelectedRepo(repos[0].full_name);
     });
-    fetch('/api/github/pull-requests').then((r) => r.json()).then((data) => setPullRequests(data.pullRequests || []));
+    fetch('/api/github/pull-requests').then((r) => r.json()).then((data) => {
+      const prs = data.pullRequests || [];
+      setPullRequests(prs);
+      if (prs[0]?.number) setSelectedPr(prs[0].number);
+    });
   }, []);
 
   async function selectRepository(fullName: string) {
@@ -25,10 +29,20 @@ export function RepositorySelector() {
     });
   }
 
+  async function selectPullRequest(number: number) {
+    setSelectedPr(number);
+    await fetch('/api/github/select-pull-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ number })
+    });
+  }
+
   const repo = repositories[0];
   const pr = pullRequests[0];
   const options = buildSelectionOptions({ repositories, pullRequests });
   const [selectedRepo, setSelectedRepo] = useState<string>('');
+  const [selectedPr, setSelectedPr] = useState<number | null>(null);
 
   return (
     <section style={{ background: '#1a1d24', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24, marginTop: 24 }}>
@@ -54,6 +68,24 @@ export function RepositorySelector() {
             }}
           >
             {item.full_name}
+          </button>
+        ))}
+      </div>
+      <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {pullRequests.map((item) => (
+          <button
+            key={item.number}
+            onClick={() => selectPullRequest(item.number)}
+            style={{
+              padding: '8px 12px',
+              borderRadius: 999,
+              border: '1px solid rgba(255,255,255,0.08)',
+              background: selectedPr === item.number ? 'rgba(242,165,26,0.14)' : 'rgba(255,255,255,0.04)',
+              color: selectedPr === item.number ? '#ffd27c' : '#f2f4f8',
+              cursor: 'pointer'
+            }}
+          >
+            PR #{item.number}
           </button>
         ))}
       </div>
