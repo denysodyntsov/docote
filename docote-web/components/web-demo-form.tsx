@@ -9,6 +9,7 @@ import { buildAnalysisSummary } from '../lib/analysis-summary';
 import { AnalysisSummaryCard } from './analysis-summary-card';
 import { AnalysisStatusList } from './analysis-status-list';
 import { OutputDiffList } from './output-diff-list';
+import { classifyAnalysisMode } from '../lib/analysis-modes';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -89,6 +90,9 @@ export function WebDemoForm() {
       {error ? <p style={{ color: '#ff8c8c' }}>{error}</p> : null}
       {response ? (
         <>
+        <div style={{ marginTop: 20, color: '#ffd27c', fontSize: 13 }}>
+          Effective mode: {classifyAnalysisMode({ providerMode: response.meta?.mode, debugProviderMode: response.debug?.provider?.mode })}
+        </div>
         <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
         <div style={{ marginTop: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 18 }}>
           <div style={{ color: '#ffd27c', fontSize: 13, marginBottom: 10 }}>Mode: {response.meta?.mode} · {response.meta?.analyzedAt}</div>

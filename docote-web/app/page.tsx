@@ -10,6 +10,7 @@ import { CurrentDocStatus } from '../components/current-doc-status';
 import { JiraContextStatus } from '../components/jira-context-status';
 import { DebugHistory } from '../components/debug-history';
 import { DocSourceCard } from '../components/doc-source-card';
+import { ModeExplainerCard } from '../components/mode-explainer-card';
 
 export default function HomePage() {
   return (
@@ -32,6 +33,7 @@ export default function HomePage() {
       <RepositorySelector />
       <CommitRangeCard />
       <DocSourceCard />
+      <ModeExplainerCard />
       <WebDemoForm />
       <JiraContextStatus />
       <CurrentDocStatus />
