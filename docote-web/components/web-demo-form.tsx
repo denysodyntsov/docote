@@ -14,6 +14,7 @@ import { FileCoverageList } from './file-coverage-list';
 import { RecommendationsList } from './recommendations-list';
 import { DocPriorityScoreCard } from './doc-priority-score-card';
 import { ReleaseImpactList } from './release-impact-list';
+import { QualitySignalsCard } from './quality-signals-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -114,6 +115,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+      {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
       {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}

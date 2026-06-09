@@ -16,6 +16,7 @@ import { buildFileCoverage } from '../../../lib/file-coverage';
 import { buildRecommendations } from '../../../lib/recommendations';
 import { calculateDocPriorityScore, priorityBand } from '../../../lib/doc-priority-score';
 import { buildReleaseImpact } from '../../../lib/release-impact';
+import { buildQualitySignals } from '../../../lib/quality-signals';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -47,6 +48,13 @@ export async function POST(req: Request) {
   const providerRequest = buildProviderRequestShape(context, diffContext);
   const fileCoverage = buildFileCoverage(diffContext);
   const documentImpact = buildDocumentImpact(diffContext);
+  const qualitySignals = buildQualitySignals({
+    jiraText: context.jiraText,
+    currentDocText: context.currentDocText,
+    extraContext: context.extraContext,
+    changedFiles: diffContext.changedFiles,
+    documentImpact
+  });
   const recommendations = buildRecommendations({ fileCoverage, documentImpact });
   const docPriorityScore = calculateDocPriorityScore({ documentImpact, fileCoverage });
   const docPriorityBand = priorityBand(docPriorityScore);
@@ -68,6 +76,7 @@ export async function POST(req: Request) {
     documentImpact,
     recommendations,
     releaseImpact,
+    qualitySignals,
     docPriority: {
       score: docPriorityScore,
       band: docPriorityBand
