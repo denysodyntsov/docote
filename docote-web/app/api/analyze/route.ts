@@ -12,6 +12,7 @@ import { storeDebugSnapshot } from '../../../lib/debug-history';
 import { buildAnalysisStatus } from '../../../lib/analysis-status';
 import { buildOutputDiff } from '../../../lib/output-diff';
 import { buildProviderRequestShape } from '../../../lib/provider-request-shape';
+import { buildContextMergeSummary } from '../../../lib/context-merge-summary';
 import { buildFileCoverage } from '../../../lib/file-coverage';
 import { buildRecommendations } from '../../../lib/recommendations';
 import { calculateDocPriorityScore, priorityBand } from '../../../lib/doc-priority-score';
@@ -77,6 +78,7 @@ export async function POST(req: Request) {
     recommendations,
     releaseImpact,
     qualitySignals,
+    contextMergeSummary,
     docPriority: {
       score: docPriorityScore,
       band: docPriorityBand

@@ -17,6 +17,7 @@ import { ReleaseImpactList } from './release-impact-list';
 import { QualitySignalsCard } from './quality-signals-card';
 import { evaluateAnalysisReadiness } from '../lib/analysis-readiness';
 import { ReadinessCard } from './readiness-card';
+import { ContextMergeCard } from './context-merge-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -119,6 +120,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+      {response?.contextMergeSummary ? <ContextMergeCard summary={response.contextMergeSummary} /> : null}
       {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
