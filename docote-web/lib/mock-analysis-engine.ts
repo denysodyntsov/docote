@@ -1,10 +1,11 @@
-import type { AnalyzePayload, AnalyzeResponse } from './analysis-types';
+import type { AnalyzeResponse } from './analysis-types';
+import type { ChangeContext } from './change-context';
 
-export function runMockAnalysis(payload: AnalyzePayload): AnalyzeResponse {
-  const scopeLabel = `${payload.scopeType}: ${payload.scopeRef}`;
-  const repoLabel = payload.repository || 'unknown repository';
-  const jiraLine = payload.jiraText ? ` Jira context was provided.` : '';
-  const docLine = payload.currentDocText ? ` Existing documentation text was provided.` : '';
+export function runMockAnalysis(context: ChangeContext): AnalyzeResponse {
+  const scopeLabel = `${context.scopeType}: ${context.scopeRef}`;
+  const repoLabel = context.repository || 'unknown repository';
+  const jiraLine = context.jiraText ? ` Jira context was provided.` : '';
+  const docLine = context.currentDocText ? ` Existing documentation text was provided.` : '';
 
   return {
     ok: true,

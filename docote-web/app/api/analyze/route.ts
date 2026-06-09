@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { sampleRequest } from '../../../lib/mock-data';
 import { runMockAnalysis } from '../../../lib/mock-analysis-engine';
 import type { AnalyzePayload } from '../../../lib/analysis-types';
+import { buildChangeContext } from '../../../lib/change-context';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -14,5 +15,6 @@ export async function POST(req: Request) {
     extraContext: sampleRequest.extraContext
   };
 
-  return NextResponse.json(runMockAnalysis(payload));
+  const context = buildChangeContext(payload);
+  return NextResponse.json(runMockAnalysis(context));
 }
