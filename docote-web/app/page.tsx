@@ -1,5 +1,7 @@
 import { OnboardingCard } from '../components/onboarding-card';
 import { FeatureGrid } from '../components/feature-grid';
+import { RepositorySelector } from '../components/repository-selector';
+import { OutputPreview } from '../components/output-preview';
 
 export default function HomePage() {
   return (
@@ -18,6 +20,8 @@ export default function HomePage() {
       </section>
 
       <OnboardingCard />
+      <RepositorySelector />
+      <OutputPreview />
       <FeatureGrid />
     </main>
   );
