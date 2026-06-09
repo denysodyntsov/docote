@@ -9,6 +9,7 @@ import { CommitRangeCard } from '../components/commit-range-card';
 import { CurrentDocStatus } from '../components/current-doc-status';
 import { JiraContextStatus } from '../components/jira-context-status';
 import { DebugHistory } from '../components/debug-history';
+import { DocSourceCard } from '../components/doc-source-card';
 
 export default function HomePage() {
   return (
@@ -30,6 +31,7 @@ export default function HomePage() {
       <GitHubConnectCard />
       <RepositorySelector />
       <CommitRangeCard />
+      <DocSourceCard />
       <WebDemoForm />
       <JiraContextStatus />
       <CurrentDocStatus />
