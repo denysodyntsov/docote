@@ -14,6 +14,7 @@ import { buildOutputDiff } from '../../../lib/output-diff';
 import { buildProviderRequestShape } from '../../../lib/provider-request-shape';
 import { buildFileCoverage } from '../../../lib/file-coverage';
 import { buildRecommendations } from '../../../lib/recommendations';
+import { calculateDocPriorityScore, priorityBand } from '../../../lib/doc-priority-score';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -46,6 +47,8 @@ export async function POST(req: Request) {
   const fileCoverage = buildFileCoverage(diffContext);
   const documentImpact = buildDocumentImpact(diffContext);
   const recommendations = buildRecommendations({ fileCoverage, documentImpact });
+  const docPriorityScore = calculateDocPriorityScore({ documentImpact, fileCoverage });
+  const docPriorityBand = priorityBand(docPriorityScore);
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -62,6 +65,10 @@ export async function POST(req: Request) {
     fileCoverage,
     documentImpact,
     recommendations,
+    docPriority: {
+      score: docPriorityScore,
+      band: docPriorityBand
+    },
     outputDiff: buildOutputDiff({
       previous: previousHistory ? { technicalSummary: previousHistory.technicalSummary } : null,
       current: {

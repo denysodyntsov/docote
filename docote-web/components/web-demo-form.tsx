@@ -12,6 +12,7 @@ import { OutputDiffList } from './output-diff-list';
 import { classifyAnalysisMode } from '../lib/analysis-modes';
 import { FileCoverageList } from './file-coverage-list';
 import { RecommendationsList } from './recommendations-list';
+import { DocPriorityScoreCard } from './doc-priority-score-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -112,6 +113,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+      {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}
       {response?.recommendations ? <RecommendationsList items={response.recommendations} /> : null}
       {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
