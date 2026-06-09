@@ -7,6 +7,7 @@ import { buildMockDiffContext } from '../../../lib/diff-context';
 import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-mock';
 import { storeAnalysisHistory } from '../../../lib/result-history';
 import { buildDocumentImpact } from '../../../lib/document-impact';
+import { createRunMetadata } from '../../../lib/run-metadata';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -22,16 +23,21 @@ export async function POST(req: Request) {
   const context = buildChangeContext(payload);
   const diffContext = buildMockDiffContext(context);
   const analysis = runMockAnalysis(context);
-
-  storeAnalysisHistory({
+  const runMetadata = createRunMetadata({
+    mode: analysis.meta?.mode || 'unknown',
     repository: context.repository,
     scopeType: context.scopeType,
-    scopeRef: context.scopeRef,
+    scopeRef: context.scopeRef
+  });
+
+  storeAnalysisHistory({
+    metadata: runMetadata,
     response: analysis
   });
 
   return NextResponse.json({
     ...analysis,
+    runMetadata,
     documentImpact: buildDocumentImpact(diffContext),
     debug: {
       contextSummary: context.summary,

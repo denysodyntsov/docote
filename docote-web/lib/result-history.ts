@@ -1,30 +1,18 @@
 import type { AnalyzeResponse } from './analysis-types';
+import type { RunMetadata } from './run-metadata';
 
-export interface AnalysisHistoryItem {
-  id: string;
-  createdAt: string;
-  repository: string;
-  scopeType: string;
-  scopeRef: string;
-  mode: string;
+export interface AnalysisHistoryItem extends RunMetadata {
   technicalSummary: string;
 }
 
 const historyStore: AnalysisHistoryItem[] = [];
 
 export function storeAnalysisHistory(input: {
-  repository: string;
-  scopeType: string;
-  scopeRef: string;
+  metadata: RunMetadata;
   response: AnalyzeResponse;
 }) {
   historyStore.unshift({
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    createdAt: new Date().toISOString(),
-    repository: input.repository,
-    scopeType: input.scopeType,
-    scopeRef: input.scopeRef,
-    mode: input.response.meta?.mode || 'unknown',
+    ...input.metadata,
     technicalSummary: input.response.result?.technicalSummary || ''
   });
 
