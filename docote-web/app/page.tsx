@@ -12,6 +12,7 @@ import { DebugHistory } from '../components/debug-history';
 import { DocSourceCard } from '../components/doc-source-card';
 import { ModeExplainerCard } from '../components/mode-explainer-card';
 import { RepositoryInsights } from '../components/repository-insights';
+import { RepoDocMap } from '../components/repo-doc-map';
 
 export default function HomePage() {
   return (
@@ -33,6 +34,7 @@ export default function HomePage() {
       <GitHubConnectCard />
       <RepositorySelector />
       <RepositoryInsights />
+      <RepoDocMap />
       <CommitRangeCard />
       <DocSourceCard />
       <ModeExplainerCard />
