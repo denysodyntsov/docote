@@ -5,6 +5,8 @@ import { defaultSelectionState } from '../lib/selection-state';
 import { SelectionSummary } from './selection-summary';
 import { DocumentImpactList } from './document-impact-list';
 import { buildAnalysisRequest } from '../lib/analysis-request-builder';
+import { buildAnalysisSummary } from '../lib/analysis-summary';
+import { AnalysisSummaryCard } from './analysis-summary-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -84,6 +86,8 @@ export function WebDemoForm() {
       <SelectionSummary repository={defaultSelectionState.repository} scopeType={defaultSelectionState.scopeType} scopeRef={defaultSelectionState.scopeRef} />
       {error ? <p style={{ color: '#ff8c8c' }}>{error}</p> : null}
       {response ? (
+        <>
+        <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
         <div style={{ marginTop: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 18 }}>
           <div style={{ color: '#ffd27c', fontSize: 13, marginBottom: 10 }}>Mode: {response.meta?.mode} · {response.meta?.analyzedAt}</div>
           <h3 style={{ margin: '0 0 10px' }}>Technical summary</h3>
@@ -97,6 +101,7 @@ export function WebDemoForm() {
             {response.result?.impactedAreas?.map((item: string) => <li key={item}>{item}</li>)}
           </ul>
         </div>
+        </>
       ) : null}
       {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
     </section>
