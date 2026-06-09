@@ -5,6 +5,7 @@ import type { AnalyzePayload } from '../../../lib/analysis-types';
 import { buildChangeContext } from '../../../lib/change-context';
 import { buildMockDiffContext } from '../../../lib/diff-context';
 import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-mock';
+import { storeAnalysisHistory } from '../../../lib/result-history';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -20,6 +21,13 @@ export async function POST(req: Request) {
   const context = buildChangeContext(payload);
   const diffContext = buildMockDiffContext(context);
   const analysis = runMockAnalysis(context);
+
+  storeAnalysisHistory({
+    repository: context.repository,
+    scopeType: context.scopeType,
+    scopeRef: context.scopeRef,
+    response: analysis
+  });
 
   return NextResponse.json({
     ...analysis,
