@@ -11,6 +11,7 @@ import { JiraContextStatus } from '../components/jira-context-status';
 import { DebugHistory } from '../components/debug-history';
 import { DocSourceCard } from '../components/doc-source-card';
 import { ModeExplainerCard } from '../components/mode-explainer-card';
+import { RepositoryInsights } from '../components/repository-insights';
 
 export default function HomePage() {
   return (
@@ -31,6 +32,7 @@ export default function HomePage() {
       <OnboardingCard />
       <GitHubConnectCard />
       <RepositorySelector />
+      <RepositoryInsights />
       <CommitRangeCard />
       <DocSourceCard />
       <ModeExplainerCard />
