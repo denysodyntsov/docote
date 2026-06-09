@@ -17,6 +17,7 @@ export function RepositorySelector() {
       const prs = data.pullRequests || [];
       setPullRequests(prs);
       if (prs[0]?.number) setSelectedPr(prs[0].number);
+      if (prs[0]?.headRefName) setSelectedBranch(prs[0].headRefName);
     });
   }, []);
 
@@ -38,11 +39,21 @@ export function RepositorySelector() {
     });
   }
 
+  async function selectBranch(branch: string) {
+    setSelectedBranch(branch);
+    await fetch('/api/github/select-branch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ branch })
+    });
+  }
+
   const repo = repositories[0];
   const pr = pullRequests[0];
   const options = buildSelectionOptions({ repositories, pullRequests });
   const [selectedRepo, setSelectedRepo] = useState<string>('');
   const [selectedPr, setSelectedPr] = useState<number | null>(null);
+  const [selectedBranch, setSelectedBranch] = useState<string>('');
 
   return (
     <section style={{ background: '#1a1d24', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24, marginTop: 24 }}>
@@ -93,9 +104,21 @@ export function RepositorySelector() {
         <div style={{ color: '#aeb6c4', marginBottom: 8 }}>Available branch options</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {options.branchOptions.map((branch) => (
-            <span key={branch} style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(242,165,26,0.08)', color: '#ffd27c', fontSize: 13 }}>
+            <button
+              key={branch}
+              onClick={() => selectBranch(branch)}
+              style={{
+                padding: '6px 10px',
+                borderRadius: 999,
+                border: '1px solid rgba(255,255,255,0.08)',
+                background: selectedBranch === branch ? 'rgba(242,165,26,0.14)' : 'rgba(255,255,255,0.04)',
+                color: selectedBranch === branch ? '#ffd27c' : '#f2f4f8',
+                fontSize: 13,
+                cursor: 'pointer'
+              }}
+            >
               {branch}
-            </span>
+            </button>
           ))}
         </div>
       </div>
