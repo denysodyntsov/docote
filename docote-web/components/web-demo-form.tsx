@@ -7,6 +7,7 @@ import { DocumentImpactList } from './document-impact-list';
 import { buildAnalysisRequest } from '../lib/analysis-request-builder';
 import { buildAnalysisSummary } from '../lib/analysis-summary';
 import { AnalysisSummaryCard } from './analysis-summary-card';
+import { AnalysisStatusList } from './analysis-status-list';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -103,6 +104,7 @@ export function WebDemoForm() {
         </div>
         </>
       ) : null}
+      {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
       {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
     </section>
   );

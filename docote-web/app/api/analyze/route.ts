@@ -9,6 +9,7 @@ import { storeAnalysisHistory } from '../../../lib/result-history';
 import { buildDocumentImpact } from '../../../lib/document-impact';
 import { createRunMetadata } from '../../../lib/run-metadata';
 import { storeDebugSnapshot } from '../../../lib/debug-history';
+import { buildAnalysisStatus } from '../../../lib/analysis-status';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
     ...analysis,
     runMetadata,
     documentImpact: buildDocumentImpact(diffContext),
+    analysisStatus: buildAnalysisStatus(),
     debug: {
       contextSummary: context.summary,
       changedFiles: diffContext.changedFiles,
