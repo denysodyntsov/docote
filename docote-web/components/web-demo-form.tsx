@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { defaultSelectionState } from '../lib/selection-state';
 import { SelectionSummary } from './selection-summary';
 import { DocumentImpactList } from './document-impact-list';
+import { resolveAnalysisScope } from '../lib/analysis-scope-resolver';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -16,13 +17,29 @@ export function WebDemoForm() {
     setError('');
 
     const formData = new FormData(event.currentTarget);
+    const draftState = {
+      repository: String(formData.get('repository') || ''),
+      scopeType: String(formData.get('scopeType') || 'pull-request') as 'pull-request' | 'branch' | 'commit-range',
+      scopeRef: String(formData.get('scopeRef') || ''),
+      jiraText: String(formData.get('jiraText') || ''),
+      currentDocText: String(formData.get('currentDocText') || ''),
+      extraContext: String(formData.get('extraContext') || '')
+    };
+
+    const resolved = resolveAnalysisScope({
+      state: draftState,
+      selectedPr: draftState.scopeType === 'pull-request' ? Number(String(draftState.scopeRef).replace('#', '')) || null : null,
+      selectedBranch: draftState.scopeType === 'branch' ? draftState.scopeRef : null,
+      commitRangeLabel: draftState.scopeType === 'commit-range' ? draftState.scopeRef : null
+    });
+
     const payload = {
-      repository: formData.get('repository'),
-      scopeType: formData.get('scopeType'),
-      scopeRef: formData.get('scopeRef'),
-      jiraText: formData.get('jiraText'),
-      currentDocText: formData.get('currentDocText'),
-      extraContext: formData.get('extraContext')
+      repository: resolved.repository,
+      scopeType: resolved.scopeType,
+      scopeRef: resolved.scopeRef,
+      jiraText: draftState.jiraText,
+      currentDocText: draftState.currentDocText,
+      extraContext: draftState.extraContext
     };
 
     try {
