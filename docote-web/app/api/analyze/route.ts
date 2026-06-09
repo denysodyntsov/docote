@@ -3,6 +3,8 @@ import { sampleRequest } from '../../../lib/mock-data';
 import { runMockAnalysis } from '../../../lib/mock-analysis-engine';
 import type { AnalyzePayload } from '../../../lib/analysis-types';
 import { buildChangeContext } from '../../../lib/change-context';
+import { buildMockDiffContext } from '../../../lib/diff-context';
+import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-mock';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -16,5 +18,16 @@ export async function POST(req: Request) {
   };
 
   const context = buildChangeContext(payload);
-  return NextResponse.json(runMockAnalysis(context));
+  const diffContext = buildMockDiffContext(context);
+  const analysis = runMockAnalysis(context);
+
+  return NextResponse.json({
+    ...analysis,
+    debug: {
+      contextSummary: context.summary,
+      changedFiles: diffContext.changedFiles,
+      promptPreview: buildProviderPrompt(context, diffContext).slice(0, 1600),
+      provider: previewProviderMode()
+    }
+  });
 }
