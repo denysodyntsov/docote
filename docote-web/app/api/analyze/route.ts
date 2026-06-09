@@ -13,6 +13,7 @@ import { buildAnalysisStatus } from '../../../lib/analysis-status';
 import { buildOutputDiff } from '../../../lib/output-diff';
 import { buildProviderRequestShape } from '../../../lib/provider-request-shape';
 import { buildFileCoverage } from '../../../lib/file-coverage';
+import { buildRecommendations } from '../../../lib/recommendations';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -42,6 +43,9 @@ export async function POST(req: Request) {
   });
 
   const providerRequest = buildProviderRequestShape(context, diffContext);
+  const fileCoverage = buildFileCoverage(diffContext);
+  const documentImpact = buildDocumentImpact(diffContext);
+  const recommendations = buildRecommendations({ fileCoverage, documentImpact });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -55,8 +59,9 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ...analysis,
     runMetadata,
-    fileCoverage: buildFileCoverage(diffContext),
-    documentImpact: buildDocumentImpact(diffContext),
+    fileCoverage,
+    documentImpact,
+    recommendations,
     outputDiff: buildOutputDiff({
       previous: previousHistory ? { technicalSummary: previousHistory.technicalSummary } : null,
       current: {
