@@ -6,6 +6,7 @@ import { buildChangeContext } from '../../../lib/change-context';
 import { buildMockDiffContext } from '../../../lib/diff-context';
 import { buildProviderPrompt, previewProviderMode } from '../../../lib/provider-mock';
 import { storeAnalysisHistory } from '../../../lib/result-history';
+import { buildDocumentImpact } from '../../../lib/document-impact';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     ...analysis,
+    documentImpact: buildDocumentImpact(diffContext),
     debug: {
       contextSummary: context.summary,
       changedFiles: diffContext.changedFiles,

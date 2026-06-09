@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { defaultSelectionState } from '../lib/selection-state';
 import { SelectionSummary } from './selection-summary';
+import { DocumentImpactList } from './document-impact-list';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -77,6 +78,7 @@ export function WebDemoForm() {
           </ul>
         </div>
       ) : null}
+      {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
     </section>
   );
 }
