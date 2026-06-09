@@ -43,6 +43,12 @@ export function WebDemoForm() {
     };
 
     try {
+      await fetch('/api/jira/context', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jiraText: payload.jiraText })
+      });
+
       await fetch('/api/docs/current', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
