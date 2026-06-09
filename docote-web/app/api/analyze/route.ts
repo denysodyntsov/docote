@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
-import { sampleRequest, sampleResult } from '../../../lib/mock-data';
+import { sampleRequest } from '../../../lib/mock-data';
+import { runMockAnalysis } from '../../../lib/mock-analysis-engine';
+import type { AnalyzePayload } from '../../../lib/analysis-types';
 
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
+  const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
+  const payload = body || {
+    repository: sampleRequest.scope.repository.full_name || `${sampleRequest.scope.repository.owner}/${sampleRequest.scope.repository.name}`,
+    scopeType: sampleRequest.scope.type,
+    scopeRef: sampleRequest.scope.pullRequestNumber ? `#${sampleRequest.scope.pullRequestNumber}` : sampleRequest.scope.branch || 'unknown',
+    jiraText: sampleRequest.jiraText,
+    currentDocText: sampleRequest.currentDocText,
+    extraContext: sampleRequest.extraContext
+  };
 
-  return NextResponse.json({
-    ok: true,
-    request: body || sampleRequest,
-    result: sampleResult,
-    meta: {
-      mode: 'mock-web',
-      analyzedAt: new Date().toISOString()
-    }
-  });
+  return NextResponse.json(runMockAnalysis(payload));
 }
