@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { defaultSelectionState } from '../lib/selection-state';
+import { SelectionSummary } from './selection-summary';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,8 @@ export function WebDemoForm() {
       scopeType: formData.get('scopeType'),
       scopeRef: formData.get('scopeRef'),
       jiraText: formData.get('jiraText'),
-      currentDocText: formData.get('currentDocText')
+      currentDocText: formData.get('currentDocText'),
+      extraContext: formData.get('extraContext')
     };
 
     try {
@@ -43,19 +46,21 @@ export function WebDemoForm() {
     <section style={{ background: '#1a1d24', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24, marginTop: 24 }}>
       <h2 style={{ marginTop: 0, fontSize: 28 }}>Interactive demo flow</h2>
       <form onSubmit={onSubmit} style={{ display: 'grid', gap: 14 }}>
-        <input name="repository" placeholder="example-org/payments-platform" defaultValue="example-org/payments-platform" style={inputStyle} />
+        <input name="repository" placeholder="example-org/payments-platform" defaultValue={defaultSelectionState.repository} style={inputStyle} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <select name="scopeType" defaultValue="pull-request" style={inputStyle as any}>
+          <select name="scopeType" defaultValue={defaultSelectionState.scopeType} style={inputStyle as any}>
             <option value="pull-request">Pull Request</option>
             <option value="branch">Branch</option>
             <option value="commit-range">Commit range</option>
           </select>
-          <input name="scopeRef" placeholder="#148 or feature/branch" defaultValue="#148" style={inputStyle} />
+          <input name="scopeRef" placeholder="#148 or feature/branch" defaultValue={defaultSelectionState.scopeRef} style={inputStyle} />
         </div>
-        <textarea name="jiraText" placeholder="Optional Jira story text" defaultValue="Story: improve beneficiary validation and update payment review flow." style={textareaStyle} />
-        <textarea name="currentDocText" placeholder="Optional current documentation text" defaultValue="Current documentation mentions old validation rules and does not describe the review flow change." style={textareaStyle} />
+        <textarea name="jiraText" placeholder="Optional Jira story text" defaultValue={defaultSelectionState.jiraText} style={textareaStyle} />
+        <textarea name="currentDocText" placeholder="Optional current documentation text" defaultValue={defaultSelectionState.currentDocText} style={textareaStyle} />
+        <textarea name="extraContext" placeholder="Optional extra context" defaultValue={defaultSelectionState.extraContext} style={textareaStyle} />
         <button type="submit" disabled={loading} style={buttonStyle}>{loading ? 'Analyzing…' : 'Run mock analysis'}</button>
       </form>
+      <SelectionSummary repository={defaultSelectionState.repository} scopeType={defaultSelectionState.scopeType} scopeRef={defaultSelectionState.scopeRef} />
       {error ? <p style={{ color: '#ff8c8c' }}>{error}</p> : null}
       {response ? (
         <div style={{ marginTop: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 18 }}>
