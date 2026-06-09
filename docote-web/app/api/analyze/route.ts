@@ -12,6 +12,7 @@ import { storeDebugSnapshot } from '../../../lib/debug-history';
 import { buildAnalysisStatus } from '../../../lib/analysis-status';
 import { buildOutputDiff } from '../../../lib/output-diff';
 import { buildProviderRequestShape } from '../../../lib/provider-request-shape';
+import { buildFileCoverage } from '../../../lib/file-coverage';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -54,6 +55,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ...analysis,
     runMetadata,
+    fileCoverage: buildFileCoverage(diffContext),
     documentImpact: buildDocumentImpact(diffContext),
     outputDiff: buildOutputDiff({
       previous: previousHistory ? { technicalSummary: previousHistory.technicalSummary } : null,

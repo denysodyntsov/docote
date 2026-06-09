@@ -10,6 +10,7 @@ import { AnalysisSummaryCard } from './analysis-summary-card';
 import { AnalysisStatusList } from './analysis-status-list';
 import { OutputDiffList } from './output-diff-list';
 import { classifyAnalysisMode } from '../lib/analysis-modes';
+import { FileCoverageList } from './file-coverage-list';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -110,6 +111,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+      {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}
       {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
       {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
     </section>
