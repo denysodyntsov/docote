@@ -21,6 +21,8 @@ import { buildQualitySignals } from '../../../lib/quality-signals';
 import { buildAnalysisConfidence } from '../../../lib/analysis-confidence';
 import { buildNextActionsSummary } from '../../../lib/next-actions-summary';
 import { buildExplainabilityNotes } from '../../../lib/explainability';
+import { buildAnalysisAudit } from '../../../lib/analysis-audit';
+import { buildRunTags } from '../../../lib/run-tags';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -62,11 +64,24 @@ export async function POST(req: Request) {
   const recommendations = buildRecommendations({ fileCoverage, documentImpact });
   const analysisConfidence = buildAnalysisConfidence({ qualitySignals });
   const explainabilityNotes = buildExplainabilityNotes({ qualitySignals });
+  const runTags = buildRunTags({
+    scopeType: context.scopeType,
+    hasJiraContext: qualitySignals.hasJiraContext,
+    hasCurrentDoc: qualitySignals.hasCurrentDoc,
+    highImpactCount: qualitySignals.highImpactCount
+  });
   const docPriorityScore = calculateDocPriorityScore({ documentImpact, fileCoverage });
   const docPriorityBand = priorityBand(docPriorityScore);
   const nextActionsSummary = buildNextActionsSummary({
     recommendations,
     docPriority: { band: docPriorityBand }
+  });
+  const analysisAudit = buildAnalysisAudit({
+    runId: runMetadata.id,
+    repository: context.repository,
+    scopeType: context.scopeType,
+    scopeRef: context.scopeRef,
+    mode: analysis.meta?.mode || 'unknown'
   });
   const releaseImpact = buildReleaseImpact({ documentImpact, fileCoverage });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
@@ -89,6 +104,8 @@ export async function POST(req: Request) {
     qualitySignals,
     analysisConfidence,
     explainabilityNotes,
+    runTags,
+    analysisAudit,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {

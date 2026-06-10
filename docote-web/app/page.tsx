@@ -13,6 +13,7 @@ import { DocSourceCard } from '../components/doc-source-card';
 import { ModeExplainerCard } from '../components/mode-explainer-card';
 import { RepositoryInsights } from '../components/repository-insights';
 import { RepoDocMap } from '../components/repo-doc-map';
+import { SessionOverviewCard } from '../components/session-overview-card';
 
 export default function HomePage() {
   return (
@@ -32,6 +33,7 @@ export default function HomePage() {
 
       <OnboardingCard />
       <GitHubConnectCard />
+      <SessionOverviewCard overview={{ repository: 'example-org/payments-platform', pullRequest: '#148', branch: 'feature/beneficiary-validation-refresh', hasCurrentDoc: true, hasJiraContext: true }} />
       <RepositorySelector />
       <RepositoryInsights />
       <RepoDocMap />
