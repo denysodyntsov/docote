@@ -23,6 +23,7 @@ import { NextActionsSummaryCard } from './next-actions-summary-card';
 import { ExplainabilityCard } from './explainability-card';
 import { AnalysisAuditCard } from './analysis-audit-card';
 import { RunTagsCard } from './run-tags-card';
+import { RiskSummaryCard } from './risk-summary-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -131,6 +132,7 @@ export function WebDemoForm() {
       {response?.explainabilityNotes ? <ExplainabilityCard notes={response.explainabilityNotes} /> : null}
       {response?.runTags ? <RunTagsCard tags={response.runTags} /> : null}
       {response?.analysisAudit ? <AnalysisAuditCard items={response.analysisAudit} /> : null}
+      {response?.riskSummary ? <RiskSummaryCard summary={response.riskSummary} /> : null}
       {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}

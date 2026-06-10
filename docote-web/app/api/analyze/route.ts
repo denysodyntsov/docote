@@ -23,6 +23,7 @@ import { buildNextActionsSummary } from '../../../lib/next-actions-summary';
 import { buildExplainabilityNotes } from '../../../lib/explainability';
 import { buildAnalysisAudit } from '../../../lib/analysis-audit';
 import { buildRunTags } from '../../../lib/run-tags';
+import { buildRiskSummary } from '../../../lib/risk-summary';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
   });
 
   const providerRequest = buildProviderRequestShape(context, diffContext);
+  const contextMergeSummary = buildContextMergeSummary(context);
   const fileCoverage = buildFileCoverage(diffContext);
   const documentImpact = buildDocumentImpact(diffContext);
   const qualitySignals = buildQualitySignals({
@@ -84,6 +86,11 @@ export async function POST(req: Request) {
     mode: analysis.meta?.mode || 'unknown'
   });
   const releaseImpact = buildReleaseImpact({ documentImpact, fileCoverage });
+  const riskSummary = buildRiskSummary({
+    analysisConfidence,
+    docPriority: { band: docPriorityBand },
+    runTags
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -106,6 +113,7 @@ export async function POST(req: Request) {
     explainabilityNotes,
     runTags,
     analysisAudit,
+    riskSummary,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
