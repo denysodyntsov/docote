@@ -24,6 +24,7 @@ import { buildExplainabilityNotes } from '../../../lib/explainability';
 import { buildAnalysisAudit } from '../../../lib/analysis-audit';
 import { buildRunTags } from '../../../lib/run-tags';
 import { buildRiskSummary } from '../../../lib/risk-summary';
+import { buildChangeFootprint } from '../../../lib/change-footprint';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -56,6 +57,7 @@ export async function POST(req: Request) {
   const contextMergeSummary = buildContextMergeSummary(context);
   const fileCoverage = buildFileCoverage(diffContext);
   const documentImpact = buildDocumentImpact(diffContext);
+  const changeFootprint = buildChangeFootprint({ changedFiles: diffContext.changedFiles });
   const qualitySignals = buildQualitySignals({
     jiraText: context.jiraText,
     currentDocText: context.currentDocText,
@@ -106,6 +108,7 @@ export async function POST(req: Request) {
     runMetadata,
     fileCoverage,
     documentImpact,
+    changeFootprint,
     recommendations,
     releaseImpact,
     qualitySignals,

@@ -24,6 +24,7 @@ import { ExplainabilityCard } from './explainability-card';
 import { AnalysisAuditCard } from './analysis-audit-card';
 import { RunTagsCard } from './run-tags-card';
 import { RiskSummaryCard } from './risk-summary-card';
+import { ChangeFootprintCard } from './change-footprint-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -128,6 +129,7 @@ export function WebDemoForm() {
       {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
       {response?.contextMergeSummary ? <ContextMergeCard summary={response.contextMergeSummary} /> : null}
       {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
+      {response?.changeFootprint ? <ChangeFootprintCard footprint={response.changeFootprint} /> : null}
       {response?.analysisConfidence ? <AnalysisConfidenceCard confidence={response.analysisConfidence} /> : null}
       {response?.explainabilityNotes ? <ExplainabilityCard notes={response.explainabilityNotes} /> : null}
       {response?.runTags ? <RunTagsCard tags={response.runTags} /> : null}
