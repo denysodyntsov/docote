@@ -30,6 +30,7 @@ import { ReviewLaneCard } from './review-lane-card';
 import { EvidenceSummaryCard } from './evidence-summary-card';
 import { ReleaseReadinessCard } from './release-readiness-card';
 import { ImpactedDocTargetsCard } from './impacted-doc-targets-card';
+import { RunOutcomeSummaryCard } from './run-outcome-summary-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -116,6 +117,7 @@ export function WebDemoForm() {
           Effective mode: {classifyAnalysisMode({ providerMode: response.meta?.mode, debugProviderMode: response.debug?.provider?.mode })}
         </div>
         <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
+        {response?.runOutcomeSummary ? <RunOutcomeSummaryCard summary={response.runOutcomeSummary} /> : null}
         <div style={{ marginTop: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 18 }}>
           <div style={{ color: '#ffd27c', fontSize: 13, marginBottom: 10 }}>Mode: {response.meta?.mode} · {response.meta?.analyzedAt}</div>
           <h3 style={{ margin: '0 0 10px' }}>Technical summary</h3>

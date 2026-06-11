@@ -30,6 +30,7 @@ import { buildReviewLane } from '../../../lib/review-lane';
 import { buildEvidenceSummary } from '../../../lib/evidence-summary';
 import { buildReleaseReadiness } from '../../../lib/release-readiness';
 import { buildImpactedDocTargets } from '../../../lib/impacted-doc-targets';
+import { buildRunOutcomeSummary } from '../../../lib/run-outcome-summary';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -124,6 +125,12 @@ export async function POST(req: Request) {
     riskSummary,
     nextActionsSummary
   });
+  const runOutcomeSummary = buildRunOutcomeSummary({
+    impactedDocTargets,
+    releaseReadiness,
+    reviewLane,
+    docDriftSummary
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -153,6 +160,7 @@ export async function POST(req: Request) {
     evidenceSummary,
     impactedDocTargets,
     releaseReadiness,
+    runOutcomeSummary,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
