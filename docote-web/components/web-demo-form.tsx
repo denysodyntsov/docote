@@ -29,6 +29,7 @@ import { DocDriftSummaryCard } from './doc-drift-summary-card';
 import { ReviewLaneCard } from './review-lane-card';
 import { EvidenceSummaryCard } from './evidence-summary-card';
 import { ReleaseReadinessCard } from './release-readiness-card';
+import { ImpactedDocTargetsCard } from './impacted-doc-targets-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ export function WebDemoForm() {
       {response?.docDriftSummary ? <DocDriftSummaryCard summary={response.docDriftSummary} /> : null}
       {response?.reviewLane ? <ReviewLaneCard lane={response.reviewLane} /> : null}
       {response?.evidenceSummary ? <EvidenceSummaryCard items={response.evidenceSummary} /> : null}
+      {response?.impactedDocTargets ? <ImpactedDocTargetsCard items={response.impactedDocTargets} /> : null}
       {response?.releaseReadiness ? <ReleaseReadinessCard readiness={response.releaseReadiness} /> : null}
       {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}

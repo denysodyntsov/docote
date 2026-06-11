@@ -29,6 +29,7 @@ import { buildDocDriftSummary } from '../../../lib/doc-drift-summary';
 import { buildReviewLane } from '../../../lib/review-lane';
 import { buildEvidenceSummary } from '../../../lib/evidence-summary';
 import { buildReleaseReadiness } from '../../../lib/release-readiness';
+import { buildImpactedDocTargets } from '../../../lib/impacted-doc-targets';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -113,6 +114,11 @@ export async function POST(req: Request) {
     hasCurrentDoc: qualitySignals.hasCurrentDoc,
     hasExtraContext: qualitySignals.hasExtraContext
   });
+  const impactedDocTargets = buildImpactedDocTargets({
+    changedFiles: diffContext.changedFiles,
+    scopeType: context.scopeType,
+    highImpactCount: qualitySignals.highImpactCount
+  });
   const releaseReadiness = buildReleaseReadiness({
     reviewLane,
     riskSummary,
@@ -145,6 +151,7 @@ export async function POST(req: Request) {
     docDriftSummary,
     reviewLane,
     evidenceSummary,
+    impactedDocTargets,
     releaseReadiness,
     nextActionsSummary,
     contextMergeSummary,
