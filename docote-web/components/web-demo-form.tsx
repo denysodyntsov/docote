@@ -35,6 +35,7 @@ import { DeliverablesCard } from './deliverables-card';
 import { ExportActionsCard } from './export-actions-card';
 import { MvpHighlightsBar } from './mvp-highlights-bar';
 import { DemoNarrativeCard } from './demo-narrative-card';
+import { ResultSection } from './result-section';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -141,27 +142,42 @@ export function WebDemoForm() {
         </div>
         </>
       ) : null}
-      {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
-      {response?.contextMergeSummary ? <ContextMergeCard summary={response.contextMergeSummary} /> : null}
-      {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
-      {response?.changeFootprint ? <ChangeFootprintCard footprint={response.changeFootprint} /> : null}
-      {response?.analysisConfidence ? <AnalysisConfidenceCard confidence={response.analysisConfidence} /> : null}
-      {response?.explainabilityNotes ? <ExplainabilityCard notes={response.explainabilityNotes} /> : null}
-      {response?.runTags ? <RunTagsCard tags={response.runTags} /> : null}
-      {response?.analysisAudit ? <AnalysisAuditCard items={response.analysisAudit} /> : null}
-      {response?.riskSummary ? <RiskSummaryCard summary={response.riskSummary} /> : null}
-      {response?.docDriftSummary ? <DocDriftSummaryCard summary={response.docDriftSummary} /> : null}
-      {response?.reviewLane ? <ReviewLaneCard lane={response.reviewLane} /> : null}
-      {response?.evidenceSummary ? <EvidenceSummaryCard items={response.evidenceSummary} /> : null}
-      {response?.impactedDocTargets ? <ImpactedDocTargetsCard items={response.impactedDocTargets} /> : null}
-      {response?.releaseReadiness ? <ReleaseReadinessCard readiness={response.releaseReadiness} /> : null}
-      {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
-      {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
-      {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
-      {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}
-      {response?.recommendations ? <RecommendationsList items={response.recommendations} /> : null}
-      {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
-      {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
+      {response ? (
+        <>
+          <ResultSection title="Primary outcomes">
+            {response?.impactedDocTargets ? <ImpactedDocTargetsCard items={response.impactedDocTargets} /> : null}
+            {response?.releaseReadiness ? <ReleaseReadinessCard readiness={response.releaseReadiness} /> : null}
+            {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
+          </ResultSection>
+
+          <ResultSection title="Reasoning and review signals">
+            {response?.riskSummary ? <RiskSummaryCard summary={response.riskSummary} /> : null}
+            {response?.docDriftSummary ? <DocDriftSummaryCard summary={response.docDriftSummary} /> : null}
+            {response?.reviewLane ? <ReviewLaneCard lane={response.reviewLane} /> : null}
+            {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
+            {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
+            {response?.recommendations ? <RecommendationsList items={response.recommendations} /> : null}
+          </ResultSection>
+
+          <ResultSection title="Context and evidence">
+            {response?.analysisStatus ? <AnalysisStatusList items={response.analysisStatus} /> : null}
+            {response?.contextMergeSummary ? <ContextMergeCard summary={response.contextMergeSummary} /> : null}
+            {response?.qualitySignals ? <QualitySignalsCard signals={response.qualitySignals} /> : null}
+            {response?.changeFootprint ? <ChangeFootprintCard footprint={response.changeFootprint} /> : null}
+            {response?.analysisConfidence ? <AnalysisConfidenceCard confidence={response.analysisConfidence} /> : null}
+            {response?.evidenceSummary ? <EvidenceSummaryCard items={response.evidenceSummary} /> : null}
+            {response?.fileCoverage ? <FileCoverageList items={response.fileCoverage} /> : null}
+            {response?.documentImpact ? <DocumentImpactList items={response.documentImpact} /> : null}
+          </ResultSection>
+
+          <ResultSection title="Traceability and diagnostics">
+            {response?.explainabilityNotes ? <ExplainabilityCard notes={response.explainabilityNotes} /> : null}
+            {response?.runTags ? <RunTagsCard tags={response.runTags} /> : null}
+            {response?.analysisAudit ? <AnalysisAuditCard items={response.analysisAudit} /> : null}
+            {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
+          </ResultSection>
+        </>
+      ) : null}
     </section>
   );
 }
