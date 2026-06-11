@@ -34,6 +34,7 @@ import { RunOutcomeSummaryCard } from './run-outcome-summary-card';
 import { DeliverablesCard } from './deliverables-card';
 import { ExportActionsCard } from './export-actions-card';
 import { MvpHighlightsBar } from './mvp-highlights-bar';
+import { DemoNarrativeCard } from './demo-narrative-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -121,6 +122,7 @@ export function WebDemoForm() {
         </div>
         <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
         {response?.mvpHighlights ? <MvpHighlightsBar items={response.mvpHighlights} /> : null}
+        {response?.demoNarrative ? <DemoNarrativeCard lines={response.demoNarrative} /> : null}
         {response?.runOutcomeSummary ? <RunOutcomeSummaryCard summary={response.runOutcomeSummary} /> : null}
         {response?.deliverables ? <DeliverablesCard items={response.deliverables} /> : null}
         <ExportActionsCard response={response} />
