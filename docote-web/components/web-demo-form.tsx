@@ -37,6 +37,7 @@ import { MvpHighlightsBar } from './mvp-highlights-bar';
 import { DemoNarrativeCard } from './demo-narrative-card';
 import { ResultSection } from './result-section';
 import { DemoFlowCard } from './demo-flow-card';
+import { ResultShell } from './result-shell';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -145,7 +146,7 @@ export function WebDemoForm() {
         </>
       ) : null}
       {response ? (
-        <>
+        <ResultShell>
           <ResultSection title="Primary outcomes">
             {response?.impactedDocTargets ? <ImpactedDocTargetsCard items={response.impactedDocTargets} /> : null}
             {response?.releaseReadiness ? <ReleaseReadinessCard readiness={response.releaseReadiness} /> : null}
@@ -178,7 +179,7 @@ export function WebDemoForm() {
             {response?.analysisAudit ? <AnalysisAuditCard items={response.analysisAudit} /> : null}
             {response?.outputDiff ? <OutputDiffList items={response.outputDiff} /> : null}
           </ResultSection>
-        </>
+        </ResultShell>
       ) : null}
     </section>
   );
