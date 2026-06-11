@@ -28,6 +28,7 @@ import { buildChangeFootprint } from '../../../lib/change-footprint';
 import { buildDocDriftSummary } from '../../../lib/doc-drift-summary';
 import { buildReviewLane } from '../../../lib/review-lane';
 import { buildEvidenceSummary } from '../../../lib/evidence-summary';
+import { buildReleaseReadiness } from '../../../lib/release-readiness';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -112,6 +113,11 @@ export async function POST(req: Request) {
     hasCurrentDoc: qualitySignals.hasCurrentDoc,
     hasExtraContext: qualitySignals.hasExtraContext
   });
+  const releaseReadiness = buildReleaseReadiness({
+    reviewLane,
+    riskSummary,
+    nextActionsSummary
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -139,6 +145,7 @@ export async function POST(req: Request) {
     docDriftSummary,
     reviewLane,
     evidenceSummary,
+    releaseReadiness,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
