@@ -27,6 +27,7 @@ import { buildRiskSummary } from '../../../lib/risk-summary';
 import { buildChangeFootprint } from '../../../lib/change-footprint';
 import { buildDocDriftSummary } from '../../../lib/doc-drift-summary';
 import { buildReviewLane } from '../../../lib/review-lane';
+import { buildEvidenceSummary } from '../../../lib/evidence-summary';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -105,6 +106,12 @@ export async function POST(req: Request) {
     docDriftSummary,
     analysisConfidence
   });
+  const evidenceSummary = buildEvidenceSummary({
+    changedFileCount: qualitySignals.changedFileCount,
+    hasJiraContext: qualitySignals.hasJiraContext,
+    hasCurrentDoc: qualitySignals.hasCurrentDoc,
+    hasExtraContext: qualitySignals.hasExtraContext
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -131,6 +138,7 @@ export async function POST(req: Request) {
     riskSummary,
     docDriftSummary,
     reviewLane,
+    evidenceSummary,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {

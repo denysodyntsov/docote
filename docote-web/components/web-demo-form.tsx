@@ -27,6 +27,7 @@ import { RiskSummaryCard } from './risk-summary-card';
 import { ChangeFootprintCard } from './change-footprint-card';
 import { DocDriftSummaryCard } from './doc-drift-summary-card';
 import { ReviewLaneCard } from './review-lane-card';
+import { EvidenceSummaryCard } from './evidence-summary-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -139,6 +140,7 @@ export function WebDemoForm() {
       {response?.riskSummary ? <RiskSummaryCard summary={response.riskSummary} /> : null}
       {response?.docDriftSummary ? <DocDriftSummaryCard summary={response.docDriftSummary} /> : null}
       {response?.reviewLane ? <ReviewLaneCard lane={response.reviewLane} /> : null}
+      {response?.evidenceSummary ? <EvidenceSummaryCard items={response.evidenceSummary} /> : null}
       {response?.nextActionsSummary ? <NextActionsSummaryCard text={response.nextActionsSummary} /> : null}
       {response?.docPriority ? <DocPriorityScoreCard score={response.docPriority.score} band={response.docPriority.band} /> : null}
       {response?.releaseImpact ? <ReleaseImpactList items={response.releaseImpact} /> : null}
