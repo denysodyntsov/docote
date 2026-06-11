@@ -40,3 +40,14 @@ Then open:
 ## Notes
 
 This MVP is intentionally mock-driven and product-oriented. It is designed to validate workflow, framing, and output structure before deeper backend integrations are added.
+
+## Verification status
+
+At the time of writing, local build verification requires installing dependencies first:
+
+```bash
+npm install
+npm run build
+```
+
+If `npm run build` reports `next: not found`, that means dependencies have not been installed yet in `docote-web`.
