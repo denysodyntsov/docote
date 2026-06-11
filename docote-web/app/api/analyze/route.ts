@@ -25,6 +25,7 @@ import { buildAnalysisAudit } from '../../../lib/analysis-audit';
 import { buildRunTags } from '../../../lib/run-tags';
 import { buildRiskSummary } from '../../../lib/risk-summary';
 import { buildChangeFootprint } from '../../../lib/change-footprint';
+import { buildDocDriftSummary } from '../../../lib/doc-drift-summary';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -93,6 +94,11 @@ export async function POST(req: Request) {
     docPriority: { band: docPriorityBand },
     runTags
   });
+  const docDriftSummary = buildDocDriftSummary({
+    hasCurrentDoc: qualitySignals.hasCurrentDoc,
+    highImpactCount: qualitySignals.highImpactCount,
+    docsLikeFiles: changeFootprint.docsLikeFiles
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -117,6 +123,7 @@ export async function POST(req: Request) {
     runTags,
     analysisAudit,
     riskSummary,
+    docDriftSummary,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
