@@ -33,6 +33,7 @@ import { ImpactedDocTargetsCard } from './impacted-doc-targets-card';
 import { RunOutcomeSummaryCard } from './run-outcome-summary-card';
 import { DeliverablesCard } from './deliverables-card';
 import { ExportActionsCard } from './export-actions-card';
+import { MvpHighlightsBar } from './mvp-highlights-bar';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -119,6 +120,7 @@ export function WebDemoForm() {
           Effective mode: {classifyAnalysisMode({ providerMode: response.meta?.mode, debugProviderMode: response.debug?.provider?.mode })}
         </div>
         <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
+        {response?.mvpHighlights ? <MvpHighlightsBar items={response.mvpHighlights} /> : null}
         {response?.runOutcomeSummary ? <RunOutcomeSummaryCard summary={response.runOutcomeSummary} /> : null}
         {response?.deliverables ? <DeliverablesCard items={response.deliverables} /> : null}
         <ExportActionsCard response={response} />

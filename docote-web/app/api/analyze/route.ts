@@ -32,6 +32,7 @@ import { buildReleaseReadiness } from '../../../lib/release-readiness';
 import { buildImpactedDocTargets } from '../../../lib/impacted-doc-targets';
 import { buildRunOutcomeSummary } from '../../../lib/run-outcome-summary';
 import { buildDeliverables } from '../../../lib/deliverables';
+import { buildMvpHighlights } from '../../../lib/mvp-highlights';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -136,6 +137,12 @@ export async function POST(req: Request) {
     analysis,
     impactedDocTargets
   });
+  const mvpHighlights = buildMvpHighlights({
+    runOutcomeSummary,
+    impactedDocTargets,
+    releaseReadiness,
+    reviewLane
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -166,6 +173,7 @@ export async function POST(req: Request) {
     impactedDocTargets,
     releaseReadiness,
     runOutcomeSummary,
+    mvpHighlights,
     deliverables,
     nextActionsSummary,
     contextMergeSummary,
