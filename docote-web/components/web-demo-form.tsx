@@ -36,6 +36,7 @@ import { ExportActionsCard } from './export-actions-card';
 import { MvpHighlightsBar } from './mvp-highlights-bar';
 import { DemoNarrativeCard } from './demo-narrative-card';
 import { ResultSection } from './result-section';
+import { DemoFlowCard } from './demo-flow-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -115,6 +116,7 @@ export function WebDemoForm() {
       </form>
       <SelectionSummary repository={defaultSelectionState.repository} scopeType={defaultSelectionState.scopeType} scopeRef={defaultSelectionState.scopeRef} />
       <ReadinessCard readiness={readiness} />
+      <DemoFlowCard />
       {error ? <p style={{ color: '#ff8c8c' }}>{error}</p> : null}
       {response ? (
         <>
