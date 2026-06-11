@@ -38,7 +38,7 @@ import { buildDemoNarrative } from '../../../lib/demo-narrative';
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
   const payload = body || {
-    repository: sampleRequest.scope.repository.full_name || `${sampleRequest.scope.repository.owner}/${sampleRequest.scope.repository.name}`,
+    repository: `${sampleRequest.scope.repository.owner}/${sampleRequest.scope.repository.name}`,
     scopeType: sampleRequest.scope.type,
     scopeRef: sampleRequest.scope.pullRequestNumber ? `#${sampleRequest.scope.pullRequestNumber}` : sampleRequest.scope.branch || 'unknown',
     jiraText: sampleRequest.jiraText,

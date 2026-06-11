@@ -43,11 +43,14 @@ This MVP is intentionally mock-driven and product-oriented. It is designed to va
 
 ## Verification status
 
-At the time of writing, local build verification requires installing dependencies first:
+The MVP has now been verified to build locally with:
 
 ```bash
 npm install
 npm run build
 ```
 
-If `npm run build` reports `next: not found`, that means dependencies have not been installed yet in `docote-web`.
+Notes from verification:
+- dependencies were installed successfully
+- the production build completed successfully
+- a few compatibility/type issues were fixed during setup verification

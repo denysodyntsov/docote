@@ -1,5 +1,5 @@
 import type { SelectionState } from './selection-state';
-import { resolveAnalysisScope } from './analysis-scope-resolver.ts';
+import { resolveAnalysisScope } from './analysis-scope-resolver';
 
 export function buildAnalysisRequest(input: {
   state: SelectionState;

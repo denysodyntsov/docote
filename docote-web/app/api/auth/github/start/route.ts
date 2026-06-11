@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getGitHubConfig, isGitHubOAuthConfigured } from '../../../../lib/github-config';
+import { getGitHubConfig, isGitHubOAuthConfigured } from '../../../../../lib/github-config';
 
 export async function GET() {
   if (!isGitHubOAuthConfigured()) {
