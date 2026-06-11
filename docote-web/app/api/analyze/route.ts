@@ -26,6 +26,7 @@ import { buildRunTags } from '../../../lib/run-tags';
 import { buildRiskSummary } from '../../../lib/risk-summary';
 import { buildChangeFootprint } from '../../../lib/change-footprint';
 import { buildDocDriftSummary } from '../../../lib/doc-drift-summary';
+import { buildReviewLane } from '../../../lib/review-lane';
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as AnalyzePayload | null;
@@ -99,6 +100,11 @@ export async function POST(req: Request) {
     highImpactCount: qualitySignals.highImpactCount,
     docsLikeFiles: changeFootprint.docsLikeFiles
   });
+  const reviewLane = buildReviewLane({
+    riskSummary,
+    docDriftSummary,
+    analysisConfidence
+  });
   const promptPreview = buildProviderPrompt(context, diffContext).slice(0, 1600);
   const provider = previewProviderMode();
 
@@ -124,6 +130,7 @@ export async function POST(req: Request) {
     analysisAudit,
     riskSummary,
     docDriftSummary,
+    reviewLane,
     nextActionsSummary,
     contextMergeSummary,
     docPriority: {
