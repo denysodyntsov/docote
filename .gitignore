@@ -6,6 +6,10 @@ Thumbs.db
 node_modules/
 npm-debug.log*
 
+# Next.js build output
+.next/
+out/
+
 # Local databases / runtime
 docote-landing/docote.db
 
