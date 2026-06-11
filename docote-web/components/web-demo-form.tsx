@@ -32,6 +32,7 @@ import { ReleaseReadinessCard } from './release-readiness-card';
 import { ImpactedDocTargetsCard } from './impacted-doc-targets-card';
 import { RunOutcomeSummaryCard } from './run-outcome-summary-card';
 import { DeliverablesCard } from './deliverables-card';
+import { ExportActionsCard } from './export-actions-card';
 
 export function WebDemoForm() {
   const [loading, setLoading] = useState(false);
@@ -120,6 +121,7 @@ export function WebDemoForm() {
         <AnalysisSummaryCard summary={buildAnalysisSummary(response)} />
         {response?.runOutcomeSummary ? <RunOutcomeSummaryCard summary={response.runOutcomeSummary} /> : null}
         {response?.deliverables ? <DeliverablesCard items={response.deliverables} /> : null}
+        <ExportActionsCard response={response} />
         <div style={{ marginTop: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 18 }}>
           <div style={{ color: '#ffd27c', fontSize: 13, marginBottom: 10 }}>Mode: {response.meta?.mode} · {response.meta?.analyzedAt}</div>
           <h3 style={{ margin: '0 0 10px' }}>Technical summary</h3>
